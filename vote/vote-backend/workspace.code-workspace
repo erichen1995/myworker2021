@@ -1,0 +1,13 @@
+{
+  "folders": [
+	{
+		"path": "..\\vote-forntend"
+	},
+	{
+		"path": "."
+	}
+],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "vote-backend"
+  }
+}
