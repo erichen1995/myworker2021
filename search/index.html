@@ -1,499 +1,481 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<style>
-  
+  <style>
+    .game {
+      width: 300px;
+      user-select: none;
+    }
+    .game.grey {
+      display: block;
+      background-color: rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+    .middle {
+      width: 540px;
+    }
+    .high {
+      width: 720px;
+    }
+    .top {
+      position: relative;
+      display: flex;
+      background-color: rgb(74, 117, 44);
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+    select {
+      border-radius: 4px;
+      border-color: rgb(74, 117, 44);
+      outline-style: none;
+    }
+    .top :first-child {
+      flex-grow: 0.6;
+    }
+    .top :nth-child(2) {
+      flex-grow: 0.4;
+    }
+    .top :nth-child(3) {
+      flex-grow: 1;
+    }
+    .top :nth-child(4) {
+      flex-grow: 0.1;
+    }
+    .flagWrap {
+      vertical-align: middle;
+      color: white;
+      font-size: 0px;
+    }
+    .flag {
+      width: 23px;
+      height: 23px;
+      vertical-align: middle;
+    }
 
-  .game{
-    width: 300px;
-    user-select:none;
-    
-  }
-  .game.grey{
-    display: block;
-    background-color: rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    
-  }
-  .middle{
-    width: 540px;
-  }
-  .high{
-    width: 720px;
-  }
-  .top{
-    position: relative;
-    display: flex;
-    background-color:rgb(74,117,44);
-    padding-top: 2px;
-    padding-bottom: 2px;
-  }
-  select{
-    border-radius: 4px;
-    border-color:rgb(74,117,44) ;
-    outline-style: none;
-  }
-  .top :first-child{
-    flex-grow: 0.6;
-  }
-  .top :nth-child(2){
-    flex-grow: 0.4;
-  }
-  .top :nth-child(3){
-    flex-grow: 1;
-  }
-  .top :nth-child(4){
-    flex-grow: 0.1;
-  }
-  .flagWrap{
-    vertical-align:middle;
-    color: white;
-    font-size: 0px;
-  }
-  .flag {
-    width:23px;
-    height: 23px;
-    vertical-align:middle;
-  }
-  
-  .flagWrap span{
-    font-size: 18px;
-    vertical-align: bottom;
-  }
+    .flagWrap span {
+      font-size: 18px;
+      vertical-align: bottom;
+    }
 
-  .timeWrap span {
-    vertical-align: bottom;
-    color: white;
-    margin-left: 10px;
-    font-size: 18px;
-  }
+    .timeWrap span {
+      vertical-align: bottom;
+      color: white;
+      margin-left: 10px;
+      font-size: 18px;
+    }
 
-  .time {
-    width:20px;
-    height: 23px;
-    vertical-align: middle;
-  }
-  .close {
-    width:15px;
-    height: 15px;
-    vertical-align: middle;
-  }
-  
+    .time {
+      width: 20px;
+      height: 23px;
+      vertical-align: middle;
+    }
+    .close {
+      width: 15px;
+      height: 15px;
+      vertical-align: middle;
+    }
 
-  .container {
-    width: fit-content;
-    overflow: hidden;
-    font-size: 0px;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-    z-index: -1;
-  }
-  
-  .container :nth-child(odd){
-    display: inline-block;
-    background-color: rgb(170,215,81);
-    width: 30px;
-    height: 30px;
-    
-  }
+    .container {
+      width: fit-content;
+      overflow: hidden;
+      font-size: 0px;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      z-index: -1;
+    }
 
-  .container :nth-child(odd).hasClicked{
-    background-color: rgb(229,194,159);
-  }
+    .container :nth-child(odd) {
+      display: inline-block;
+      background-color: rgb(170, 215, 81);
+      width: 30px;
+      height: 30px;
+    }
 
+    .container :nth-child(odd).hasClicked {
+      background-color: rgb(229, 194, 159);
+    }
 
-  .container :nth-child(even){
-    display: inline-block;
-    background-color: rgb(162,209,73);
-    width: 30px;
-    height: 30px;
-  }
+    .container :nth-child(even) {
+      display: inline-block;
+      background-color: rgb(162, 209, 73);
+      width: 30px;
+      height: 30px;
+    }
 
-  .container :nth-child(even).hasClicked{
-    background-color: rgb(215,184,153);
-  }
+    .container :nth-child(even).hasClicked {
+      background-color: rgb(215, 184, 153);
+    }
 
-  /* 10.点到N0,先绿变黄 */
-  .block{
-    font-size: 25px;
-    vertical-align:bottom;
-    text-align: center;
-    z-index: -1;
-  }
-  .block.end{
-    font-size: 0px;
-  }
-  .block:hover {
-    opacity: 0.7;
-  }
-  .block.mid:not(.hasClicked){
-    opacity: 0.7;
-  }
+    /* 10.点到N0,先绿变黄 */
+    .block {
+      font-size: 25px;
+      vertical-align: bottom;
+      text-align: center;
+      z-index: -1;
+    }
+    .block.end {
+      font-size: 0px;
+    }
+    .block:hover {
+      opacity: 0.7;
+    }
+    .block.mid:not(.hasClicked) {
+      opacity: 0.7;
+    }
 
-  .block.flags{
-    background-image:url("./photo/flag.png");
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-  .block.flags.end:not(.Bob){
-    background-image: none;
-  }
-  .block.N0.flags:not(.BOb){
-    background-image: none;
-  }
-  .container .Bob.show{
-    background-color:rgba(11, 238, 185);
-    background-image: url("./photo/blob.gif");
-    background-size: 30px 30px;
-  }
-  
-  .N1{
-    color:rgb(25,118,210) ;
-  }
-  .N2{
-    color:rgb(56,142,60);
-  }
-  .N3{
-    color: rgb(211,47,47);
-  }
-  .N4{
-    color:rebeccapurple ;
-  }
-  .N5{
-    color: cadetblue;
-  }
-  .N6{
-    color: darkred;
-  }
-  .N7{
-    color: sienna;
-  }
+    .block.flags {
+      background-image: url("./photo/flag.png");
+      background-size: 20px 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .block.flags.end:not(.Bob) {
+      background-image: none;
+    }
+    .block.N0.flags:not(.BOb) {
+      background-image: none;
+    }
+    .container .Bob.show {
+      background-color: rgba(11, 238, 185);
+      background-image: url("./photo/blob.gif");
+      background-size: 30px 30px;
+    }
 
-</style>
-<body>
-  
+    .N1 {
+      color: rgb(25, 118, 210);
+    }
+    .N2 {
+      color: rgb(56, 142, 60);
+    }
+    .N3 {
+      color: rgb(211, 47, 47);
+    }
+    .N4 {
+      color: rebeccapurple;
+    }
+    .N5 {
+      color: cadetblue;
+    }
+    .N6 {
+      color: darkred;
+    }
+    .N7 {
+      color: sienna;
+    }
+  </style>
+  <body>
     <div class="game">
-    <div class="top">
-      <span class="howhard">
-        <select name="select">
-          <option value="lowLevel" selected> 低难度</option> 
-          <option value="midLevel" >中等难度</option>
-          <option value="highLevel">高难度</option>
-        </select>
-      </span>
-      <span class="flagWrap"><img  src="photo/flag.png"   class="flag" /> <span></span></span>
-      <span class="timeWrap"><img  src="photo/clock.png"  class="time"  /><span>000</span></span>
-      <span><img  src="photo/close.png" class="close"  /></span>
+      <div class="top">
+        <span class="howhard">
+          <select name="select">
+            <option value="lowLevel" selected>低难度</option>
+            <option value="midLevel">中等难度</option>
+            <option value="highLevel">高难度</option>
+          </select>
+        </span>
+        <span class="flagWrap"
+          ><img src="photo/flag.png" class="flag" /> <span></span
+        ></span>
+        <span class="timeWrap"
+          ><img src="photo/clock.png" class="time" /><span>000</span></span
+        >
+        <span><img src="photo/close.png" class="close" /></span>
+      </div>
+      <pre class="container"></pre>
     </div>
-    <pre class="container">
-    </pre>
-  </div>
 
-  <script src="lodash.js"></script>
-  <script>
+    <script src="lodash.js"></script>
+    <script>
+      let selectLevel = document.querySelector("select");
+      let row = 10; //行个数
+      let cow = 10; //列个数
+      let count = 10; //炸弹数
+      //1.雷的数量
 
+      selectLevel.onchange = function () {
+        changeLevel(selectLevel);
+      };
+      //16.调整难度展现不同大小内容界面
 
-  let selectLevel = document.querySelector("select")
-  let row = 10                   //行个数
-  let cow = 10                  //列个数
-  let count = 10                //炸弹数
-  //1.雷的数量
-  
-  selectLevel.onchange=function(){
-    changeLevel(selectLevel)
-  }
-  //16.调整难度展现不同大小内容界面
-  
-  let container = document.querySelector(".container");
-  let game  =document.querySelector(".game")
-  let flagWrap = document.querySelector(".flagWrap")
-  
-  function isBob(obj){
-    return obj.classList.contains("Bob")
-  }
-  //判断是否是炸弹
-  
-  function isFlag(obj){
-    return obj.classList.contains("flags")
-  }
-  //判断是否有旗帜
-  function CountFlag(count){
-    let flags = document.querySelectorAll(".flags")
-    flagWrap.lastElementChild.innerText = count-flags.length
-  }
-  //计算旗帜数量
-  function hasClicked(obj){
-    return obj.classList.contains("hasClicked")
-  }
+      let container = document.querySelector(".container");
+      let game = document.querySelector(".game");
+      let flagWrap = document.querySelector(".flagWrap");
 
-
-  //判断是否点击过
-
-  let timeWrap =document.querySelector(".timeWrap")
-  function padding(num, length) {    
-    return (Array(length).join("0") + num).slice(-length);
-  }
-  let timeNumber = 0
-    timeWrap.lastElementChild.innerText = padding(timeNumber,3)
-  var pageTimer = {}
-
-  var onceSetIn= _.once(()=>{pageTimer["timer1"]=setInterval(()=>{
-      
-      timeNumber++
-      timeWrap.lastElementChild.innerText = padding(timeNumber,3)
-    
-    if(timeNumber==999)  clearInterval(pageTimer["timer1"])
-  },1000)})
-  
-
-  //15.计数器计数  思路:"只运行一次"
-
-
-  var oneWin=_.once(()=>alert("Win"))
-  var oneOver = _.once(()=>alert("GAME OVER"))
-  //22. 只显示一次赢局
-  function render(cow,row,count){
-    CountFlag(count)
-    //13.输入旗帜数字
-    container.innerHTML=""
-    //1.行数
-    for(let i = 0 ;i< row;i++){
-    // 2.列数
-      for(let j = 0;j< cow;j++){
-      // 3.创建div
-        let  spanObj = document.createElement("span");
-        let brObj = document.createElement("br")
-        // 4.添加class
-        spanObj.classList.add('block');
-        spanObj.id = "a"+i+"?"+j;
-      
-        // 5.将div对象追加到容器中
-        container.appendChild(spanObj);
-        if((j+1)%row==0){
-          container.appendChild(brObj)
-        }
-        // 6.将brObj对象追加到容器中
+      function isBob(obj) {
+        return obj.classList.contains("Bob");
       }
-    }
-    //整体监听事件
-    let  block = document.querySelectorAll(".block");
-    block.forEach(it=>{
-      it.onclick=function(){
-        onceSetIn()
-        //计数器
-        leftClick(it,count)}
-      it.oncontextmenu=function(e){
-        e.preventDefault()
-        rightClick(it,count)
+      //判断是否是炸弹
+
+      function isFlag(obj) {
+        return obj.classList.contains("flags");
       }
-      it.addEventListener("mousedown",function(e){
-        if(e.which===2){
-          e.preventDefault()
-          middleClick(it)
-        }
-      })
-      it.addEventListener("mouseup",function(e){
-        if(e.which===2){
-          e.preventDefault()
-          middleUp(it)
-        }
-      })
-    })
-    
-    
-  }
-  render(cow,row,count)
-
-
-  var firstClick = 0
-  function leftClick(clickBlock,count){
-    let  block = document.querySelectorAll(".block");
- 
-    let flags = document.querySelectorAll(".flags")
-
-    firstClick++
-    if(firstClick==1){
-      let  block = document.querySelectorAll(".block");
-      while(document.querySelectorAll(".Bob").length < count){                         //bug 选择class 必须.xxx
-        let randBob = Math.floor(block.length*Math.random())
-        if(!(block[randBob]===clickBlock))  block[randBob].classList.add("Bob")
+      //判断是否有旗帜
+      function CountFlag(count) {
+        let flags = document.querySelectorAll(".flags");
+        flagWrap.lastElementChild.innerText = count - flags.length;
       }
-    }
-    //7.随机雷的位置 
-    //24.当第一次点击后才出现炸弹  可以防止炸弹第一次点击就爆炸
+      //计算旗帜数量
+      function hasClicked(obj) {
+        return obj.classList.contains("hasClicked");
+      }
 
-    
-      let idx = clickBlock.id
-      
-      let x = Number(idx.split("a")[1].split("?")[0])
-      let y = Number(idx.split("a")[1].split("?")[1])
-      let  CountNumber= 0
-      for(let i = x - 1;i <= x + 1; i++ ){
-        for(let j = y - 1;j <= y + 1 ; j++){
-          let countObj = document.getElementById("a"+i+"?"+j)
-          if(countObj&&isBob(countObj)){
-            CountNumber++
+      //判断是否点击过
+
+      let timeWrap = document.querySelector(".timeWrap");
+      function padding(num, length) {
+        return (Array(length).join("0") + num).slice(-length);
+      }
+      let timeNumber = 0;
+      timeWrap.lastElementChild.innerText = padding(timeNumber, 3);
+      var pageTimer = {};
+
+      var onceSetIn = _.once(() => {
+        pageTimer["timer1"] = setInterval(() => {
+          timeNumber++;
+          timeWrap.lastElementChild.innerText = padding(timeNumber, 3);
+
+          if (timeNumber == 999) clearInterval(pageTimer["timer1"]);
+        }, 1000);
+      });
+
+      //15.计数器计数  思路:"只运行一次"
+
+      var oneWin = _.once(() => alert("Win"));
+      var oneOver = _.once(() => alert("GAME OVER"));
+      //22. 只显示一次赢局
+      function render(cow, row, count) {
+        CountFlag(count);
+        //13.输入旗帜数字
+        container.innerHTML = "";
+        //1.行数
+        for (let i = 0; i < row; i++) {
+          // 2.列数
+          for (let j = 0; j < cow; j++) {
+            // 3.创建div
+            let spanObj = document.createElement("span");
+            let brObj = document.createElement("br");
+            // 4.添加class
+            spanObj.classList.add("block");
+            spanObj.id = "a" + i + "?" + j;
+
+            // 5.将div对象追加到容器中
+            container.appendChild(spanObj);
+            if ((j + 1) % row == 0) {
+              container.appendChild(brObj);
+            }
+            // 6.将brObj对象追加到容器中
           }
         }
+        //整体监听事件
+        let block = document.querySelectorAll(".block");
+        block.forEach((it) => {
+          it.onclick = function () {
+            onceSetIn();
+            //计数器
+            leftClick(it, count);
+          };
+          it.oncontextmenu = function (e) {
+            e.preventDefault();
+            rightClick(it, count);
+          };
+          it.addEventListener("mousedown", function (e) {
+            if (e.which === 2) {
+              e.preventDefault();
+              middleClick(it);
+            }
+          });
+          it.addEventListener("mouseup", function (e) {
+            if (e.which === 2) {
+              e.preventDefault();
+              middleUp(it);
+            }
+          });
+        });
       }
-      if(!isBob(clickBlock)){
-        clickBlock.classList.add("N" + CountNumber)
-        clickBlock.classList.add("hasClicked")
-        if(CountNumber){
-          clickBlock.innerText=CountNumber
-        }
-      }
-      
-      
-      // 9.计算炸弹周围数字"思路 遍历现在点位周围，发现周围是否有炸弹，有就count ++""
-      if(!CountNumber){
-        for(let i = x - 1;i <= x + 1;i++){
-          for(let j = y -1;j<= y+1 ;j++){
-            let findObj = document.getElementById("a"+i+"?"+j)
-            if(findObj&&!hasClicked(findObj)){
-              leftClick(findObj,count)
+      render(cow, row, count);
+
+      var firstClick = 0;
+      function leftClick(clickBlock, count) {
+        if (!isFlag(clickBlock)) {
+          let block = document.querySelectorAll(".block");
+          let flags = document.querySelectorAll(".flags");
+
+          firstClick++;
+          if (firstClick == 1) {
+            let block = document.querySelectorAll(".block");
+            while (document.querySelectorAll(".Bob").length < count) {
+              //bug 选择class 必须.xxx
+              let randBob = Math.floor(block.length * Math.random());
+              if (!(block[randBob] === clickBlock))
+                block[randBob].classList.add("Bob");
             }
           }
-        }
-      }
-      //11.按到N0，扩散 "思路 周围的数字如果被点过就不再点 并且递归调用"
-      if( !isFlag(clickBlock)){
-        //18.插红旗的点不能再左键按
-          if(isBob(clickBlock)){
-            let Bobs = document.querySelectorAll(".Bob")
-            Bobs.forEach(it=>{
-              it.classList.add("show")
-            })
-            clearInterval(pageTimer["timer1"]);
-            block.forEach(it=>{
-              it.classList.add("end")
-            })
-            oneOver()
-              //8.摸到炸弹爆炸
-            //12.显示所有炸弹
-            }   
-      } 
+          //7.随机雷的位置
+          //24.当第一次点击后才出现炸弹  可以防止炸弹第一次点击就爆炸
 
-      let  gameEnd = document.querySelectorAll(".hasClicked");
-      let Bobs = document.querySelectorAll(".Bob")
-      if (gameEnd.length == block.length - Bobs.length ){
-        clearInterval(pageTimer["timer1"]);
-        block.forEach(it=>{
-          it.classList.add("end")
-        })
-        // flags.forEach(it=>{
-        //   it.classList.remove("flags")
-        // })
-        // block.forEach(it=>{ 
-        //   it.textContent=""
-        // })
+          let idx = clickBlock.id;
 
-         //bug 会同时触发中键赢和输
-
-        //思路问题 不能直接去除所有的内容  会发生整体性bug 
-        //解决思路  可以让内容整体不可见
-        setTimeout(()=>{
-          oneWin()
-        },1000)
-        return 
-      }
-  }
-  //当11个时候就能赢 这是
-  function rightClick(clickBlock,count){
-    
-    if(!hasClicked(clickBlock)){
-      clickBlock.classList.toggle("flags")
-    }
-    //12.插红旗
-    
-    CountFlag(count)
-    //19.插旗数字减少或增加
-    
-
-  //bug 切换level时候发生页面旗帜数量减少
-    
-  }
-  
-  function middleClick(clickBlock){
-    if(hasClicked(clickBlock)){
-      let idx = clickBlock.id
-      let x = Number(idx.split("a")[1].split("?")[0])
-      let y = Number(idx.split("a")[1].split("?")[1])
-      var butFlags = 0
-      for(let i = x - 1;i <= x + 1;i++){
-        for(let j = y -1;j<= y + 1 ;j++){
-          let midObj = document.getElementById("a"+i+"?"+j)
-          if(midObj) midObj.classList.add("mid")
-          if(midObj&&midObj.classList.contains("flags")){
-            butFlags++
-          }
-        }
-      }
-      if(butFlags==Number(clickBlock.textContent)){
-          for(let i = x - 1;i <= x + 1;i++){
-            for(let j = y -1;j<= y + 1 ;j++){
-              let findObj = document.getElementById("a"+i+"?"+j)
-              if(findObj&&!hasClicked(findObj)){
-                leftClick(findObj,count)
+          let x = Number(idx.split("a")[1].split("?")[0]);
+          let y = Number(idx.split("a")[1].split("?")[1]);
+          let CountNumber = 0;
+          for (let i = x - 1; i <= x + 1; i++) {
+            for (let j = y - 1; j <= y + 1; j++) {
+              let countObj = document.getElementById("a" + i + "?" + j);
+              if (countObj && isBob(countObj)) {
+                CountNumber++;
               }
             }
           }
+          if (!isBob(clickBlock)) {
+            clickBlock.classList.add("N" + CountNumber);
+            clickBlock.classList.add("hasClicked");
+            if (CountNumber) {
+              clickBlock.innerText = CountNumber;
+            }
+          }
+
+          // 9.计算炸弹周围数字"思路 遍历现在点位周围，发现周围是否有炸弹，有就count ++""
+          if (!CountNumber) {
+            for (let i = x - 1; i <= x + 1; i++) {
+              for (let j = y - 1; j <= y + 1; j++) {
+                let findObj = document.getElementById("a" + i + "?" + j);
+                if (findObj && !hasClicked(findObj)) {
+                  leftClick(findObj, count);
+                }
+              }
+            }
+          }
+          // debugger;
+          //11.按到N0，扩散 "思路 周围的数字如果被点过就不再点 并且递归调用"
+          if (!isFlag(clickBlock)) {
+            //18.插红旗的点不能再左键按
+            if (isBob(clickBlock)) {
+              let Bobs = document.querySelectorAll(".Bob");
+              Bobs.forEach((it) => {
+                it.classList.add("show");
+              });
+              clearInterval(pageTimer["timer1"]);
+              block.forEach((it) => {
+                it.classList.add("end");
+              });
+              oneOver();
+              //8.摸到炸弹爆炸
+              //12.显示所有炸弹
+            }
+          }
+
+          let gameEnd = document.querySelectorAll(".hasClicked");
+          let Bobs = document.querySelectorAll(".Bob");
+          if (gameEnd.length == block.length - Bobs.length) {
+            clearInterval(pageTimer["timer1"]);
+            block.forEach((it) => {
+              it.classList.add("end");
+            });
+            // flags.forEach(it=>{
+            //   it.classList.remove("flags")
+            // })
+            // block.forEach(it=>{
+            //   it.textContent=""
+            // })
+
+            //bug 会同时触发中键赢和输
+
+            //思路问题 不能直接去除所有的内容  会发生整体性bug
+            //解决思路  可以让内容整体不可见
+            setTimeout(() => {
+              oneWin();
+            }, 1000);
+            return;
+          }
+        }
       }
-    
-       // 21.中键数字如果周围具有数字相对应的旗帜，则会直接触发剩余的空格
-    }
+      //当11个时候就能赢 这是
+      function rightClick(clickBlock, count) {
+        if (!hasClicked(clickBlock)) {
+          clickBlock.classList.toggle("flags");
+        }
+        //12.插红旗
 
+        CountFlag(count);
+        //19.插旗数字减少或增加
 
-    //22.中键数字周围的格子会高亮
-  }
+        //bug 切换level时候发生页面旗帜数量减少
+      }
 
-  function middleUp(clickBlock){
-    let mid =document.querySelectorAll(".mid")
-    mid.forEach(it=>{
-      it.classList.remove("mid")
-    })
-  }
+      function middleClick(clickBlock) {
+        if (hasClicked(clickBlock)) {
+          let idx = clickBlock.id;
+          let x = Number(idx.split("a")[1].split("?")[0]);
+          let y = Number(idx.split("a")[1].split("?")[1]);
+          var butFlags = 0;
+          for (let i = x - 1; i <= x + 1; i++) {
+            for (let j = y - 1; j <= y + 1; j++) {
+              let midObj = document.getElementById("a" + i + "?" + j);
+              if (midObj) midObj.classList.add("mid");
+              if (midObj && midObj.classList.contains("flags")) {
+                butFlags++;
+              }
+            }
+          }
+          if (butFlags == Number(clickBlock.textContent)) {
+            for (let i = x - 1; i <= x + 1; i++) {
+              for (let j = y - 1; j <= y + 1; j++) {
+                let findObj = document.getElementById("a" + i + "?" + j);
+                if (findObj && !hasClicked(findObj)) {
+                  leftClick(findObj, count);
+                }
+              }
+            }
+          }
 
-  
-  function changeLevel(selected){
-    if(selected.value=="lowLevel"){
-      if(!game.classList.contains("low")) game.classList.add("low")
-      if(game.classList.contains("middle")) game.classList.remove("middle")
-      if(game.classList.contains("high")) game.classList.remove("high")
-      firstClick = 0
-      render(10,10,10)
-    }else if(selected.value=="midLevel"){
-      if(!game.classList.contains("middle")) game.classList.add("middle")
-      if(game.classList.contains("low")) game.classList.remove("low")
-      if(game.classList.contains("high")) game.classList.remove("high")
-      firstClick = 0
-      render(18,18,40)
-    }else{
-      if(!game.classList.contains("high")) game.classList.add("high")
-      if(game.classList.contains("low")) game.classList.remove("low")
-      if(game.classList.contains("middle")) game.classList.remove("middle")
-      firstClick = 0
-      render(24,24,99)
-    }
-  }
-  //bug 可以优化 但懒得想了
-  
-  
+          // 21.中键数字如果周围具有数字相对应的旗帜，则会直接触发剩余的空格
+        }
 
-  //17.改变界面大小
-  
-  
+        //22.中键数字周围的格子会高亮
+      }
 
+      function middleUp(clickBlock) {
+        let mid = document.querySelectorAll(".mid");
+        mid.forEach((it) => {
+          it.classList.remove("mid");
+        });
+      }
 
-  //可以继续优化的点   在中键时候可以旗帜也可以不亮
-  //在中键时候 绿块也能够高亮 
-  //重复轮子  不继续了
-  </script>
-</body>
+      function changeLevel(selected) {
+        if (selected.value == "lowLevel") {
+          if (!game.classList.contains("low")) game.classList.add("low");
+          if (game.classList.contains("middle"))
+            game.classList.remove("middle");
+          if (game.classList.contains("high")) game.classList.remove("high");
+          firstClick = 0;
+          render(10, 10, 10);
+        } else if (selected.value == "midLevel") {
+          if (!game.classList.contains("middle")) game.classList.add("middle");
+          if (game.classList.contains("low")) game.classList.remove("low");
+          if (game.classList.contains("high")) game.classList.remove("high");
+          firstClick = 0;
+          render(18, 18, 40);
+        } else {
+          if (!game.classList.contains("high")) game.classList.add("high");
+          if (game.classList.contains("low")) game.classList.remove("low");
+          if (game.classList.contains("middle"))
+            game.classList.remove("middle");
+          firstClick = 0;
+          render(24, 24, 99);
+        }
+      }
+      //bug 可以优化 但懒得想了
+
+      //17.改变界面大小
+
+      //可以继续优化的点   在中键时候可以旗帜也可以不亮
+      //在中键时候 绿块也能够高亮
+      //重复轮子  不继续了
+    </script>
+  </body>
 </html>
